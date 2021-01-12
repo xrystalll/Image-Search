@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
+
+:root {
+  --accent-color: #333333;
+  --main-bg: #000000;
+  --main-text-color: #F2F2F2;
+  --main-info-color: #b6bfb7;
+  --main-success-color: #4CAF50;
+  --main-danger-color: #E53935;
+  --secondary-bg: #444444;
+  --secondary-color: #EEEEEE;
+  --selection-bg: #333333;
+  --selection-color: #F1F1F1;
+  --default-transparent: transparent;
+  --default-transparent-02: rgb(0 0 0 / 20%);
+  --default-transparent-04: rgb(0 0 0 / 40%);
+  --default-transparent-06: rgb(0 0 0 / 60%);
+  --default-transparent-08: rgb(0 0 0 / 80%);
+}
+* {
+  outline: none;
+  -webkit-box-sizing: border-box; 
+  box-sizing: border-box;
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+}
+::selection {
+  color: var(--selection-color);
+  background: var(--selection-bg);
+  text-shadow: none;
+}
+body {
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 0 auto;
+  color: var(--main-text-color);
+  background: var(--main-bg);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: var(--default-transparent);
+  -webkit-app-region: no-drag;
+}
+#root {
+  height: 100vh;
+}
+
+.none {
+  display: none;
+}
+
+.loader {
+  display: flex;
+}

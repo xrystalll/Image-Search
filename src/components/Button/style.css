@@ -1,0 +1,29 @@
+.btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  width: max-content;
+  min-width: 100px;
+  height: 36px;
+  border-radius: 6px;
+  margin: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn.main {
+  background-color: var(--secondary-bg);
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: background-color .1s;
+}
+.btn:hover::before {
+  background-color: var(--default-transparent-02);
+}
