@@ -3,15 +3,12 @@ import './style.css';
 const RadioGroup = ({ data, state, onChange }) => {
   return (
     <form onChange={onChange} className="radio_group">
-      <label>
-        <input type="radio" name="engine" value={data[0]} defaultChecked={state === data[0]} />
-        {data[0]}
-      </label>
-
-      <label>
-        <input type="radio" name="engine" value={data[1]} defaultChecked={state === data[1]} />
-        {data[1]}
-      </label>
+      {data.map(item => (
+        <div className="radio_item" key={item.id}>
+          <input id={'engine_' + item.id} type="radio" name="engine" value={item.id} defaultChecked={state.id === item.id} />
+          <label htmlFor={'engine_' + item.id}>{item.name}</label>
+        </div>
+      ))}
     </form>
   )
 }

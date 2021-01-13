@@ -3,34 +3,48 @@ import Layout from 'components/Layout';
 import FileInput from 'components/FileInput';
 import RadioGroup from 'components/RadioGroup';
 import Button from 'components/Button';
-import { Loader } from 'components/Loader';
+import Loader from 'components/Loader';
+// import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 import './style.css';
 
 const Home = () => {
+  document.title = 'Image Search'
+
   const [file, setFile] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [uploaded, setUploaded] = useState('')
   const [error, setError] = useState('')
 
-  const engines = ['Google', 'Yandex']
+  const engines = [{
+    id: 1,
+    name: 'Google',
+    url: 'https://www.google.com/searchbyimage?image_url='
+  }, {
+    id: 2,
+    name: 'Yandex',
+    url: 'https://yandex.com/images/search?rpt=imageview&url='
+  }]
   const [engine, setEngine] = useState(engines[0])
 
   const apiUrl = 'https://api.imgur.com/3/image'
   const clientId = 'f1f9224726db6dd'
-  const google = 'https://www.google.com/searchbyimage?image_url='
-  const yandex = 'https://yandex.com/images/search?rpt=imageview&url='
+
+  // const ffmpeg = createFFmpeg({ log: true })
+  const videoTypes = ['video/mp4', 'video/webm']
 
   const chooseHandler = (e) => {
     error && setError('')
     setUploaded('')
-    setFile(e.target.files[0])
+    setFile(e.target.files?.item(0))
   }
 
   const uploadClick = () => {
     if (file) {
       setUploading(true)
       upload(file)
+      // !videoTypes.find(i => i === file.type) ? upload(file) : convertToImage(file)
     } else {
+      setUploading(false)
       setError('Select a file!')
     }
   }
@@ -39,8 +53,8 @@ const Home = () => {
     search(uploaded)
   }
 
-  const engineHandler = (e) => {
-    setEngine(e.target.value)
+  const engineHandler = ({ target }) => {
+    setEngine(engines.filter(i => i.id === target.value * 1 )[0])
   }
 
   const upload = (file) => {
@@ -48,7 +62,15 @@ const Home = () => {
     headers.append('Authorization', 'Client-ID ' + clientId)
 
     const formdata = new FormData()
-    formdata.append('image', file)
+    if (videoTypes.find(i => i === file.type)) {
+      setError('Error. Allowed only images')
+      setUploading(false)
+      setUploaded('')
+      setFile(null)
+      return
+    } else {
+      formdata.append('image', file)
+    }
 
     const options = {
       method: 'POST',
@@ -59,7 +81,7 @@ const Home = () => {
     fetch(apiUrl, options)
       .then(response => response.json())
       .then(({ data, success }) => {
-        if (!success) throw Error
+        if (!success && !data.link) throw Error
 
         setUploading(false)
         setUploaded(data.link)
@@ -74,21 +96,27 @@ const Home = () => {
       })
   }
 
+  // const convertToImage = async (file) => {
+  //   await ffmpeg.load()
+  //   ffmpeg.FS('writeFile', 'video.mp4', await fetchFile(file))
+  //   await ffmpeg.run('-i', 'video.mp4', '-ss', '00:00:01.000', '-vframes', '1', '-f', 'jpeg', 'image.jpg')
+  //   const data = ffmpeg.FS('readFile', 'image.jpg')
+  //   const url = URL.createObjectURL(new Blob([data.buffer], { type: 'image/jpeg' }))
+  //   upload(url)
+  // }
+
   const search = (fileUrl) => {
-    const searcUrl = engine === engines[0] ? google + fileUrl : yandex + fileUrl
-    const win = window.open(searcUrl, '_blank')
+    const win = window.open(engine.url + fileUrl, '_blank')
     win.focus()
   }
 
   return (
     <Layout>
       <FileInput onChange={chooseHandler}>
-        <span>
-          {!error
-            ? file ? file.name : 'Select image or video'
-            : error
-          }
-        </span>
+        {!error
+          ? file ? file.name : 'Select an image'
+          : error
+        }
       </FileInput>
 
       <RadioGroup data={engines} state={engine} onChange={engineHandler} />

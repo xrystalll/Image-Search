@@ -11,11 +11,13 @@
   --secondary-color: #EEEEEE;
   --selection-bg: #333333;
   --selection-color: #F1F1F1;
+  --monochrome: #FFF;
   --default-transparent: transparent;
   --default-transparent-02: rgb(0 0 0 / 20%);
   --default-transparent-04: rgb(0 0 0 / 40%);
   --default-transparent-06: rgb(0 0 0 / 60%);
   --default-transparent-08: rgb(0 0 0 / 80%);
+  --white-transparent-04: rgb(255 255 255 / 40%);
 }
 * {
   outline: none;

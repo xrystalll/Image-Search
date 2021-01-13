@@ -1,4 +1,4 @@
-export const Loader = ({ size = '24', color = '#fff' }) => {
+const Loader = ({ size = '24', color = '#fff' }) => {
   return (
     <div className="loader">
       <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
@@ -9,3 +9,5 @@ export const Loader = ({ size = '24', color = '#fff' }) => {
     </div>
   )
 }
+
+export default Loader;
