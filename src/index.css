@@ -1,17 +1,17 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap');
 
 :root {
-  --accent-color: #333333;
-  --main-bg: #000000;
-  --main-text-color: #F2F2F2;
+  --accent-color: #59005e;
+  --main-bg: #101010;
+  --main-text-color: #faf2fb;
   --main-info-color: #b6bfb7;
   --main-success-color: #4CAF50;
   --main-danger-color: #E53935;
-  --secondary-bg: #444444;
+  --secondary-bg: #332633;
   --secondary-color: #EEEEEE;
-  --selection-bg: #333333;
-  --selection-color: #F1F1F1;
-  --monochrome: #FFF;
+  --selection-bg: #8c0692;
+  --selection-color: #ffffff;
+  --monochrome: #ffffff;
   --default-transparent: transparent;
   --default-transparent-02: rgb(0 0 0 / 20%);
   --default-transparent-04: rgb(0 0 0 / 40%);
@@ -33,19 +33,16 @@
   text-shadow: none;
 }
 body {
-  overflow: hidden;
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   line-height: 1.4;
+  max-width: 600px;
   margin: 0 auto;
   color: var(--main-text-color);
   background: var(--main-bg);
   -webkit-font-smoothing: antialiased;
   -webkit-tap-highlight-color: var(--default-transparent);
   -webkit-app-region: no-drag;
-}
-#root {
-  height: 100vh;
 }
 
 .none {
@@ -54,4 +51,51 @@ body {
 
 .loader {
   display: flex;
+}
+
+.space {
+  margin: 16px 0;
+}
+
+.react-thumbnail-generator {
+  display: none;
+}
+
+.react-tabs__tab-list {
+  border-bottom: 2px solid var(--secondary-bg);
+  margin: 8px 0 16px;
+  padding: 0;
+}
+
+.react-tabs__tab {
+  display: inline-block;
+  bottom: -2px;
+  position: relative;
+  list-style: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.react-tabs__tab:first-child {
+  margin-left: 8px;
+}
+
+.react-tabs__tab--selected {
+  background: var(--secondary-bg);
+  color: var(--secondary-color);
+  border-radius: 6px 6px 0 0;
+}
+
+.react-tabs__tab--disabled {
+  color: var(--white-transparent-04);
+  cursor: default;
+}
+
+.react-tabs__tab-panel {
+  display: none;
+}
+
+.react-tabs__tab-panel--selected {
+  display: block;
 }

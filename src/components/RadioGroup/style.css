@@ -1,11 +1,12 @@
 .radio_group {
-  margin: 8px;
+  margin: 16px;
   display: flex;
   align-items: center;
 }
 
 .radio_item {
   margin-right: 16px;
+  user-select: none;
 }
 .radio_item label {
   display: flex;
@@ -35,7 +36,7 @@
   width: 8px;
   height: 8px;
   transform: scale(0);
-  background: var(--monochrome);
+  background: var(--accent-color);
 }
 .radio_item input[type="radio"] {
   display: none;
@@ -44,7 +45,7 @@
   color: var(--main-text-color);
 }
 .radio_item input[type="radio"]:checked + label:before {
-  border-color: var(--monochrome);
+  border-color: var(--accent-color);
   animation: ripple .3s linear forwards;
 }
 .radio_item input[type="radio"]:checked + label:after {

@@ -13,17 +13,26 @@
   user-select: none;
 }
 
-.btn.main {
-  background-color: var(--secondary-bg);
-}
-
 .btn::before {
   content: '';
   position: absolute;
   width: 100%;
   height: 100%;
+  border-radius: 6px;
   transition: background-color .1s;
 }
 .btn:hover::before {
   background-color: var(--default-transparent-02);
+}
+
+.btn.main {
+  background-color: var(--secondary-bg);
+}
+
+.btn.disable {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+.btn.disable::before {
+  background-color: var(--default-transparent-04);
 }

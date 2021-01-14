@@ -1,18 +1,21 @@
 import { useState } from 'react';
 import Layout from 'components/Layout';
+import TextInput from 'components/TextInput';
 import FileInput from 'components/FileInput';
 import RadioGroup from 'components/RadioGroup';
 import Button from 'components/Button';
 import Loader from 'components/Loader';
-// import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
-import './style.css';
+
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import VideoThumbnail from 'react-video-thumbnail';
 
 const Home = () => {
-  document.title = 'Image Search'
+  document.title = 'Image search'
 
   const [file, setFile] = useState(null)
   const [uploading, setUploading] = useState(false)
   const [uploaded, setUploaded] = useState('')
+  const [ready, setReady] = useState(false)
   const [error, setError] = useState('')
 
   const engines = [{
@@ -29,32 +32,43 @@ const Home = () => {
   const apiUrl = 'https://api.imgur.com/3/image'
   const clientId = 'f1f9224726db6dd'
 
-  // const ffmpeg = createFFmpeg({ log: true })
   const videoTypes = ['video/mp4', 'video/webm']
 
-  const chooseHandler = (e) => {
+  const chooseHandler = ({ target }) => {
     error && setError('')
-    setUploaded('')
-    setFile(e.target.files?.item(0))
+    uploaded && setUploaded('')
+
+    const selectedFile = target.files?.item(0)
+
+    if (videoTypes.find(i => i === selectedFile.type)) {
+      ready && setReady(false)
+    } else {
+      setReady(true)
+    }
+
+    setFile(selectedFile)
+  }
+
+  const linkHandler = ({ target }) => {
+    error && setError('')
+    uploaded && setUploaded('')
+    target.value.length > 0 ? setReady(true) : setReady(false)
+
+    setUploaded(target.value)
+  }
+
+  const engineHandler = ({ target }) => {
+    setEngine(engines.filter(i => i.id === target.value * 1 )[0])
   }
 
   const uploadClick = () => {
     if (file) {
       setUploading(true)
       upload(file)
-      // !videoTypes.find(i => i === file.type) ? upload(file) : convertToImage(file)
     } else {
       setUploading(false)
       setError('Select a file!')
     }
-  }
-
-  const searchClick = () => {
-    search(uploaded)
-  }
-
-  const engineHandler = ({ target }) => {
-    setEngine(engines.filter(i => i.id === target.value * 1 )[0])
   }
 
   const upload = (file) => {
@@ -62,15 +76,7 @@ const Home = () => {
     headers.append('Authorization', 'Client-ID ' + clientId)
 
     const formdata = new FormData()
-    if (videoTypes.find(i => i === file.type)) {
-      setError('Error. Allowed only images')
-      setUploading(false)
-      setUploaded('')
-      setFile(null)
-      return
-    } else {
-      formdata.append('image', file)
-    }
+    formdata.append('image', file)
 
     const options = {
       method: 'POST',
@@ -81,7 +87,7 @@ const Home = () => {
     fetch(apiUrl, options)
       .then(response => response.json())
       .then(({ data, success }) => {
-        if (!success && !data.link) throw Error
+        if (!success) throw Error
 
         setUploading(false)
         setUploaded(data.link)
@@ -96,35 +102,71 @@ const Home = () => {
       })
   }
 
-  // const convertToImage = async (file) => {
-  //   await ffmpeg.load()
-  //   ffmpeg.FS('writeFile', 'video.mp4', await fetchFile(file))
-  //   await ffmpeg.run('-i', 'video.mp4', '-ss', '00:00:01.000', '-vframes', '1', '-f', 'jpeg', 'image.jpg')
-  //   const data = ffmpeg.FS('readFile', 'image.jpg')
-  //   const url = URL.createObjectURL(new Blob([data.buffer], { type: 'image/jpeg' }))
-  //   upload(url)
-  // }
+  const searchClick = () => {
+    search(uploaded)
+  }
 
   const search = (fileUrl) => {
     const win = window.open(engine.url + fileUrl, '_blank')
     win.focus()
   }
 
+  const thumbnailHandler = (data) => {
+    setReady(true)
+    setFile(dataURLtoFile(data))
+  }
+
+  const dataURLtoFile = (dataurl) => {
+    const arr = dataurl.split(',')
+    const mime = arr[0].match(/:(.*?);/)[1]
+    const bstr = atob(arr[1])
+    let n = bstr.length 
+    const u8arr = new Uint8Array(n)
+
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
+
+    return new File([u8arr], 'image.' + mime.split('/')[1], { type: mime })
+  }
+
   return (
-    <Layout>
-      <FileInput onChange={chooseHandler}>
-        {!error
-          ? file ? file.name : 'Select an image'
-          : error
-        }
-      </FileInput>
+    <Layout title="Search by image or video">
+      <Tabs>
+        <TabList>
+          <Tab>Upload file</Tab>
+          <Tab>Paste link</Tab>
+        </TabList>
+
+        <TabPanel>
+          <FileInput onChange={chooseHandler}>
+            {!error
+              ? file ? file.name : 'Select image or video'
+              : error
+            }
+          </FileInput>
+        </TabPanel>
+
+        <TabPanel>
+          <TextInput onChange={linkHandler} hint={'Paste link to image'} />
+        </TabPanel>
+      </Tabs>
 
       <RadioGroup data={engines} state={engine} onChange={engineHandler} />
 
       {!uploaded
-        ? <Button onClick={uploadClick}>{uploading ? <Loader /> : 'Upload and find'}</Button>
-        : <Button onClick={searchClick}>Find</Button>
+        ? <Button className={!ready && 'main disable'} onClick={uploadClick}>{uploading ? <Loader /> : 'Upload and find'}</Button>
+        : <Button className={!ready && 'main disable'} onClick={searchClick}>Find</Button>
       }
+
+      {file && videoTypes.find(i => i === file.type) && (
+        <VideoThumbnail
+          videoUrl={URL.createObjectURL(file)}
+          thumbnailHandler={thumbnailHandler}
+          snapshotAtTime={2}
+          renderThumbnail={false}
+        />
+      )}
     </Layout>
   )
 }

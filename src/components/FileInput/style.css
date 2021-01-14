@@ -19,6 +19,9 @@
   border-radius: 3px;
   font-size: 15px;
 }
+.file_input .btn::before {
+  border-radius: 3px;
+}
 
 .file_input span {
   color: var(--secondary-color);

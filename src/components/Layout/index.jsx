@@ -1,9 +1,12 @@
 import './style.css';
 
-const Layout = ({ children }) => {
+const Layout = ({ title, children }) => {
   return (
-    <div>
-      {children}
+    <div className="layout">
+      {title && <h2 className="layout_title">{title}</h2>}
+      <div>
+        {children}
+      </div>
     </div>
   )
 }

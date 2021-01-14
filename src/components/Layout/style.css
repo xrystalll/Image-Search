@@ -1,0 +1,18 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+}
+
+.layout_title {
+  margin: 16px 8px 24px;
+  position: relative;
+  top: -36px;
+}
+
+@media (max-width: 400px) {
+  .layout_title {
+    text-align: center;
+  }
+}

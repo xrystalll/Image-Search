@@ -5,7 +5,7 @@ import './style.css';
 const FileInput = ({ onChange, children }) => {
   return (
     <Fragment>
-      <input type="file" onChange={onChange} id="fileInput" className="none" />
+      <input id="fileInput" type="file" onChange={onChange} className="none" />
       <label htmlFor="fileInput" className="file_input" title="Upload file">
         <Button>Choose</Button>
         <span>
