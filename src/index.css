@@ -45,6 +45,10 @@ body {
   -webkit-app-region: no-drag;
 }
 
+a {
+  color: var(--accent-color);
+}
+
 .none {
   display: none;
 }

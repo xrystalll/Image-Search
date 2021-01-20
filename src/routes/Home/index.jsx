@@ -152,7 +152,7 @@ const Home = () => {
         </TabPanel>
       </Tabs>
 
-      <RadioGroup data={engines} state={engine} onChange={engineHandler} />
+      <RadioGroup name="engine" data={engines} state={engine} onChange={engineHandler} />
 
       {!uploaded
         ? <Button className={!ready && 'main disable'} onClick={uploadClick}>{uploading ? <Loader /> : 'Upload and find'}</Button>

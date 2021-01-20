@@ -1,13 +1,11 @@
+import RadioButton from 'components/RadioButton';
 import './style.css';
 
-const RadioGroup = ({ data, state, onChange }) => {
+const RadioGroup = ({ name, data, state, onChange }) => {
   return (
     <form onChange={onChange} className="radio_group">
       {data.map(item => (
-        <div className="radio_item" key={item.id}>
-          <input id={'engine_' + item.id} type="radio" name="engine" value={item.id} defaultChecked={state.id === item.id} />
-          <label htmlFor={'engine_' + item.id}>{item.name}</label>
-        </div>
+        <RadioButton key={item.id} name={name} data={item} state={state} />
       ))}
     </form>
   )
